@@ -42,10 +42,10 @@ InvoicePdfGenerator (Service)
 
 ## 📱 Screenshots
 <p align = "center">
-<img src="https://github.com/user-attachments/assets/6aab0971-4306-4c93-b12f-c36bf71ee442" alt="Details Screen" width="25%">
-<img src="https://github.com/user-attachments/assets/73edb821-4ae9-4b39-af61-1f72381e64ae" alt="Details Screen 2" width="25%">
-<img src="https://github.com/user-attachments/assets/ce4d0ecf-5c6d-4c36-a698-f42e3eaf49b4" alt="Setting Screen" width="25%">
-<img src="https://github.com/user-attachments/assets/c5987148-2166-4289-9ab5-d42110fe09d6" width="25%">
+<img src="https://github.com/user-attachments/assets/d5d82826-da62-4fb3-9a3c-78ae6789ef96" alt="Details Screen" width="25%">
+<img src="https://github.com/user-attachments/assets/70b5c84d-b2fd-4a2d-823d-b2776daefe5f" alt="Details Screen 2" width="25%">
+<img src="https://github.com/user-attachments/assets/543c6a1a-03bb-4158-bf18-1f71de071a30" alt="Setting Screen" width="25%">
+<img src="https://github.com/user-attachments/assets/7fe9e0e7-9f69-4ad5-b70c-8a320ef8693b" width="25%">
 </p>
 
 ## ⚡ Performance Optimizations
@@ -99,5 +99,3 @@ MIT License - see [LICENSE](LICENSE) file
 - LinkedIn: [Ayushi Gupta](https://linkedin.com/in/ayushigupta-android)
 
 ---
-
-**Built with ❤️ for Indian businesses**
