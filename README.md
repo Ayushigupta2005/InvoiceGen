@@ -40,14 +40,6 @@ InvoicePdfGenerator (Service)
 - **Storage**: MediaStore API + FileProvider
 - **Reactivity**: StateFlow + Kotlin Coroutines
 
-## 📱 Screenshots
-<p align = "center">
-<img src="https://github.com/user-attachments/assets/d5d82826-da62-4fb3-9a3c-78ae6789ef96" alt="Details Screen" width="25%">
-<img src="https://github.com/user-attachments/assets/70b5c84d-b2fd-4a2d-823d-b2776daefe5f" alt="Details Screen 2" width="25%">
-<img src="https://github.com/user-attachments/assets/543c6a1a-03bb-4158-bf18-1f71de071a30" alt="Setting Screen" width="25%">
-<img src="https://github.com/user-attachments/assets/7fe9e0e7-9f69-4ad5-b70c-8a320ef8693b" width="25%">
-</p>
-
 ## ⚡ Performance Optimizations
 
 ### Bitmap Caching (70% improvement)
