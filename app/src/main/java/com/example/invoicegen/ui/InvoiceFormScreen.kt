@@ -17,19 +17,16 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.invoicegen.data.CompanySettings
 import com.example.invoicegen.model.InvoiceHeader
 import com.example.invoicegen.model.InvoiceItem
 import com.example.invoicegen.pdf.InvoicePdfGenerator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.bouncycastle.mime.Headers
 
 // This structure is not very testable. You want to practice something called state hoisting here.
 // I use a pattern where my screen composable handles state, much like you have it here but the actual
@@ -67,7 +64,7 @@ fun InvoiceFormScreen(
     val transport by viewModel.transport.collectAsState()
     val summary by viewModel.summary.collectAsState()
     val settingsState by viewModel.companySettings.collectAsState()
-    val settings = settingsState ?: CompanySettings()
+    val settings = settingsState ?: com.example.invoicegen.data.CompanySettings()
 
 
     // From here down is the content composable. Just inject your state vals into it.
@@ -186,9 +183,7 @@ fun InvoiceFormScreen(
             Button(
                 // You can bubble the clicks up through callbacks to avoid any viewmodel references in the ui
                 onClick = { viewModel.addItem() },
-                modifier = Modifier
-                    .align(Alignment.End)
-                    .padding(vertical = 8.dp)
+                modifier = Modifier.align(Alignment.End).padding(vertical = 8.dp)
             ) {
                 Icon(Icons.Default.Add, contentDescription = null)
                 Text("Add Item")
@@ -287,9 +282,7 @@ fun InvoiceFormScreen(
                         }
                     }
                 },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp)
+                modifier = Modifier.fillMaxWidth().height(50.dp)
             ) {
                 Text("GENERATE PDF (3 COPIES)")
             }
@@ -305,9 +298,7 @@ fun ItemRow(
     onDelete: () -> Unit
 ) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 4.dp),
+        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
         elevation = CardDefaults.cardElevation(2.dp)
     ) {
         Column(Modifier.padding(8.dp)) {
