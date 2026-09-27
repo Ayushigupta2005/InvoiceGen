@@ -17,23 +17,33 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.invoicegen.data.CompanySettings
+import com.example.invoicegen.model.InvoiceHeader
 import com.example.invoicegen.model.InvoiceItem
 import com.example.invoicegen.pdf.InvoicePdfGenerator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.bouncycastle.mime.Headers
 
+// This structure is not very testable. You want to practice something called state hoisting here.
+// I use a pattern where my screen composable handles state, much like you have it here but the actual
+// ui would be in a composable InvoiceFormScreenContent that is completely stateless and used for ui tests.
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InvoiceFormScreen(
     viewModel: InvoiceViewModel,
-    pdfGenerator: InvoicePdfGenerator,
+    pdfGenerator: InvoicePdfGenerator, // Inject this into the viewmodel or a repository instead of here.
     onNavigateToSettings: () -> Unit
 ) {
     val context = LocalContext.current
+    // You should avoid this.
+    // Only because the coroutine is tied tho the screens lifecycle so a screen rotation would kill it mid-job.
     val scope = rememberCoroutineScope()
     
     val permissionLauncher = rememberLauncherForActivityResult(
@@ -50,13 +60,17 @@ fun InvoiceFormScreen(
         }
     }
 
+    // Use .collectAsStateWithLifecycle() it requires a new gradle dependency but gives your collectors
+    // lifecycle awareness.
     val header by viewModel.header.collectAsState()
     val items by viewModel.items.collectAsState()
     val transport by viewModel.transport.collectAsState()
     val summary by viewModel.summary.collectAsState()
     val settingsState by viewModel.companySettings.collectAsState()
-    val settings = settingsState ?: com.example.invoicegen.data.CompanySettings()
+    val settings = settingsState ?: CompanySettings()
 
+
+    // From here down is the content composable. Just inject your state vals into it.
     Scaffold(
         topBar = {
             TopAppBar(
@@ -82,6 +96,8 @@ fun InvoiceFormScreen(
                 OutlinedTextField(
                     value = header.invoiceNo,
                     onValueChange = { viewModel.updateHeader(header.copy(invoiceNo = it)) },
+                    // use string resources. It allows for multi language support.
+                    // stringResource(R.string.invoice_no)
                     label = { Text("Invoice No") },
                     modifier = Modifier.weight(1f)
                 )
@@ -168,8 +184,11 @@ fun InvoiceFormScreen(
             }
             
             Button(
+                // You can bubble the clicks up through callbacks to avoid any viewmodel references in the ui
                 onClick = { viewModel.addItem() },
-                modifier = Modifier.align(Alignment.End).padding(vertical = 8.dp)
+                modifier = Modifier
+                    .align(Alignment.End)
+                    .padding(vertical = 8.dp)
             ) {
                 Icon(Icons.Default.Add, contentDescription = null)
                 Text("Add Item")
@@ -243,6 +262,7 @@ fun InvoiceFormScreen(
             Spacer(modifier = Modifier.height(24.dp))
             Button(
                 onClick = {
+                    // This should be in the viewmodel.
                     scope.launch {
                         try {
                             val uris = withContext(Dispatchers.IO) {
@@ -267,7 +287,9 @@ fun InvoiceFormScreen(
                         }
                     }
                 },
-                modifier = Modifier.fillMaxWidth().height(50.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp)
             ) {
                 Text("GENERATE PDF (3 COPIES)")
             }
@@ -283,7 +305,9 @@ fun ItemRow(
     onDelete: () -> Unit
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
         elevation = CardDefaults.cardElevation(2.dp)
     ) {
         Column(Modifier.padding(8.dp)) {
@@ -337,4 +361,28 @@ fun ItemRow(
             }
         }
     }
+}
+
+// As an example
+@Composable
+fun InvoiceFormScreenContent(
+    headers: InvoiceHeader,
+    // other states
+    onAddItemClicked: () -> Unit,
+    // other click actions
+    onDateUpdated: (String) -> Unit // used for updating text fields
+) {
+
+}
+
+// You'll then be able to do this and see your ui in preview as you make changes.
+// This is a good example of why you'd not want the viewmodel within the content composable.
+@Preview(showBackground = true)
+@Composable
+fun InvoiceFormScreenPreview() {
+    InvoiceFormScreenContent(
+        headers = InvoiceHeader(),
+        onAddItemClicked = {},
+        onDateUpdated = {}
+    )
 }

@@ -73,6 +73,9 @@ class InvoiceViewModel(private val repository: SettingsRepository) : ViewModel()
     }
 
     fun updateSummary(newSummary: InvoiceSummary) {
+        // This is done in several places here. I'd recommend
+        // _summary.update { newSummary }
+        // It works atomically which is better for flows
         _summary.value = newSummary
     }
 
